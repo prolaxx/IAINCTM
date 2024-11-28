@@ -3,49 +3,48 @@ frontend:
   phases:
     preBuild:
       commands:
-        # Instalar dependencias
+        # Instalar dependencias necesarias para el frontend
         - npm install
     build:
       commands:
-        # Construir la aplicación frontend y backend
+        # Construir la aplicación completa (frontend)
         - npm run build
   artifacts:
-    # Directorio donde se encuentra el artefacto construido (Next.js genera .next)
+    # Define el directorio donde se encuentran los artefactos construidos por Next.js
     baseDirectory: .next
     files:
       - '**/*'
   cache:
-    # Cache para acelerar futuros despliegues
+    # Define rutas para almacenar en caché dependencias y archivos de construcción
     paths:
       - node_modules/**/*
       - .next/cache/**/*
   environment:
     variables:
-      # Variables de entorno personalizadas necesarias para producción
-      OPENAI_API_KEY: $OPENAI_API_KEY
-      OPENAI_ASSISTANT_ID: $OPENAI_ASSISTANT_ID
+      # Variables necesarias en producción para el frontend (si fueran necesarias para configuraciones específicas, no APIs)
+      # Mantén esta sección vacía si no necesitas exponer variables en el cliente.
 
 backend:
   phases:
     preBuild:
       commands:
-        # Instalar dependencias del backend
+        # Instalar dependencias necesarias para el backend
         - npm install
     build:
       commands:
-        # Construir el backend
+        # Construir el backend (adaptar según tu estructura)
         - npm run build:backend
   artifacts:
-    # Define los archivos que se generarán para el backend
+    # Define el directorio y los archivos generados para el backend
     baseDirectory: dist
     files:
       - '**/*'
   cache:
-    # Cachear dependencias del backend
+    # Define rutas para almacenar en caché dependencias y archivos de construcción del backend
     paths:
       - node_modules/**/*
   environment:
     variables:
-      # Variables de entorno necesarias en el backend
+      # Variables de entorno necesarias en el backend, se leen de AWS Secrets Manager
       OPENAI_API_KEY: $OPENAI_API_KEY
       OPENAI_ASSISTANT_ID: $OPENAI_ASSISTANT_ID
