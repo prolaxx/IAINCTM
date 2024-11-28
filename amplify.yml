@@ -1,0 +1,51 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Instalar dependencias
+        - npm install
+    build:
+      commands:
+        # Construir la aplicación frontend y backend
+        - npm run build
+  artifacts:
+    # Directorio donde se encuentra el artefacto construido (Next.js genera .next)
+    baseDirectory: .next
+    files:
+      - '**/*'
+  cache:
+    # Cache para acelerar futuros despliegues
+    paths:
+      - node_modules/**/*
+      - .next/cache/**/*
+  environment:
+    variables:
+      # Variables de entorno personalizadas necesarias para producción
+      OPENAI_API_KEY: $OPENAI_API_KEY
+      OPENAI_ASSISTANT_ID: $OPENAI_ASSISTANT_ID
+
+backend:
+  phases:
+    preBuild:
+      commands:
+        # Instalar dependencias del backend
+        - npm install
+    build:
+      commands:
+        # Construir el backend
+        - npm run build:backend
+  artifacts:
+    # Define los archivos que se generarán para el backend
+    baseDirectory: dist
+    files:
+      - '**/*'
+  cache:
+    # Cachear dependencias del backend
+    paths:
+      - node_modules/**/*
+  environment:
+    variables:
+      # Variables de entorno necesarias en el backend
+      OPENAI_API_KEY: $OPENAI_API_KEY
+      OPENAI_ASSISTANT_ID: $OPENAI_ASSISTANT_ID
