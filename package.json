@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.699.0",
     "animate.css": "^4.1.1",
     "animejs": "^3.2.2",
     "next": "^14.2.10",
@@ -18,8 +19,8 @@
     "react-markdown": "^9.0.1"
   },
   "devDependencies": {
-    "@types/node": "^22.7.5",
-    "@types/react": "^18.3.11",
+    "@types/node": "^22.10.1",
+    "@types/react": "^18.3.12",
     "eslint": "^8.25.0",
     "eslint-config-next": "^14.0.0",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
