@@ -1,6 +1,9 @@
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
 
-module.exports = {
+module.exports = withBundleAnalyzer({
   reactStrictMode: true,
   webpack: (config, options) => {
     if (config.resolve.plugins) {
@@ -10,4 +13,4 @@ module.exports = {
     }
     return config;
   },
-};
+});
