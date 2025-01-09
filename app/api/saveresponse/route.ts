@@ -1,31 +1,36 @@
-import { NextRequest, NextResponse } from 'next/server';
-
-// Simulación de base de datos (esto es solo un ejemplo)
-interface FormData {
-  name: string;
-  email: string;
-  responses?: string;  // Ahora es opcional
-  favoriteClasses: string[];
-}
-
-const database: FormData[] = [];
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/app/utils/firebaseAdmin";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, favoriteClasses } = await req.json();
+    const data = await req.json();
+    console.log("Datos del request:", data);
+
+    const { name, email, favoriteClasses } = data;
+
+    // Si favoriteClasses no es realmente obligatorio, quita la condición. Aquí solo validamos name y email.
+    if (!name || !email) {
+      return NextResponse.json(
+        { error: "Los campos name y email son obligatorios." },
+        { status: 400 }
+      );
+    }
 
     console.log("Datos recibidos:", { name, email, favoriteClasses });
 
-    if (!name || !email || !favoriteClasses) {
-      return NextResponse.json({ error: 'Todos los campos son obligatorios.' }, { status: 400 });
-    }
+    await db
+      .collection("formResponses")
+      .doc(email)
+      .set({ name, email, favoriteClasses: favoriteClasses ?? [] });
 
-    // Guardar los datos en la base de datos o procesarlos como sea necesario
-    database.push({ name, email, favoriteClasses });
-
-    return NextResponse.json({ message: 'Respuestas guardadas correctamente.' });
+    return NextResponse.json({
+      message: "Respuestas guardadas correctamente.",
+    });
   } catch (error) {
-    console.error('Error al procesar la solicitud:', error);
-    return NextResponse.json({ error: 'Error al procesar la solicitud.' }, { status: 500 });
+    console.error("Error al procesar la solicitud:", error);
+    return NextResponse.json(
+      { error: "Error al procesar la solicitud." },
+      { status: 500 }
+    );
   }
 }

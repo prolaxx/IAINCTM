@@ -26,8 +26,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env*.local
 .env
+.env*.local
 
 # vercel
 .vercel
@@ -35,4 +35,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# firebase sensitive files
+firebase-service-account.json
+
+# OpenAI SDK
 openai-v4.29.0-beta.1.tgz
+
+# Docker
+docker-compose.override.yml
+
+# Amplify
+amplify/.config
+amplify/.local-*
+
+# Ignorar logs de desarrollo
+*.log
