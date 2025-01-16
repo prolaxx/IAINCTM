@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
 import anime from "animejs";
 import "animate.css";
 
-// Interfaz del estado con TODOS tus campos
+// Interfaz del estado con TODOS tus campos (incluyendo todos los que aparecen en las 86 preguntas)
 interface FormDataType {
   [key: string]: any; // Para simplificar la definición de tantos campos
 
@@ -99,17 +99,16 @@ interface FormDataType {
 
 // Interfaz para las preguntas
 interface QuestionProps {
-  name: keyof FormDataType;      // Debe coincidir con las propiedades de FormDataType
-  label: string;                 // Texto de la pregunta
+  name: keyof FormDataType;
+  label: string;
   type: "text" | "email" | "radio" | "checkbox" | "select" | "number";
-  options?: string[];            // Para radio, checkbox o select
+  options?: string[];
   placeholder?: string;
   required?: boolean;
 }
 
-// Aquí están TODAS las 86 preguntas en orden
+// TODAS las 86 preguntas (sin omitir nada):
 const questions: QuestionProps[] = [
-  // 1) Correo
   {
     name: "email",
     label: "Correo electrónico",
@@ -117,7 +116,6 @@ const questions: QuestionProps[] = [
     placeholder: "Correo electrónico",
     required: true,
   },
-  // 2) Nombre
   {
     name: "firstName",
     label: "Nombre(s)",
@@ -125,7 +123,6 @@ const questions: QuestionProps[] = [
     placeholder: "Nombre(s)",
     required: true,
   },
-  // 3) Apellido
   {
     name: "lastName",
     label: "Apellido(s)",
@@ -133,7 +130,6 @@ const questions: QuestionProps[] = [
     placeholder: "Apellido(s)",
     required: true,
   },
-  // 4) Edad
   {
     name: "age",
     label: "Edad",
@@ -141,21 +137,18 @@ const questions: QuestionProps[] = [
     placeholder: "Edad",
     required: true,
   },
-  // 5) Código postal
   {
     name: "postalCode",
     label: "Código Postal",
     type: "text",
     placeholder: "Código Postal",
   },
-  // 6) Tipo de educación
   {
     name: "educationPreference",
     label: "¿Qué tipo de educación te interesa tener?",
     type: "select",
     options: ["Presencial", "En línea", "Mixta", "Sin preferencia"],
   },
-  // 7) Dispuesto a trasladarte
   {
     name: "willingToRelocate",
     label:
@@ -163,7 +156,6 @@ const questions: QuestionProps[] = [
     type: "radio",
     options: ["Sí", "No"],
   },
-  // 8) Clases favoritas
   {
     name: "favoriteClasses",
     label:
@@ -214,7 +206,6 @@ const questions: QuestionProps[] = [
       "Problemas sociales, políticos y económicos de México",
     ],
   },
-  // 9) toolSkill
   {
     name: "toolSkill",
     label:
@@ -222,7 +213,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy mal", "Mal", "Neutral", "Bien", "Muy bien"],
   },
-  // 10) physicalTaskComfort
   {
     name: "physicalTaskComfort",
     label:
@@ -236,7 +226,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 11) mechanicalSkill
   {
     name: "mechanicalSkill",
     label:
@@ -244,7 +233,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy limitada", "Limitada", "Neutral", "Buena", "Muy buena"],
   },
-  // 12) manualToolSkill
   {
     name: "manualToolSkill",
     label:
@@ -252,7 +240,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy malo(a)", "Malo(a)", "Neutral", "Bueno(a)", "Muy bueno(a)"],
   },
-  // 13) manualDexterity
   {
     name: "manualDexterity",
     label:
@@ -260,7 +247,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy malo(a)", "Malo(a)", "Neutral", "Bueno(a)", "Muy bueno(a)"],
   },
-  // 14) machineComfort
   {
     name: "machineComfort",
     label: "¿Qué tan cómodo(a) te sientes trabajando con maquinaria motorizada?",
@@ -273,7 +259,6 @@ const questions: QuestionProps[] = [
       "Muy cómodo(a)",
     ],
   },
-  // 15) dirtyHandsWillingness
   {
     name: "dirtyHandsWillingness",
     label:
@@ -287,7 +272,6 @@ const questions: QuestionProps[] = [
       "Muy dispuesto(a)",
     ],
   },
-  // 16) programmingToolsInterest
   {
     name: "programmingToolsInterest",
     label:
@@ -301,7 +285,6 @@ const questions: QuestionProps[] = [
       "Muy deseoso(a)",
     ],
   },
-  // 17) specializedMachineInterest
   {
     name: "specializedMachineInterest",
     label:
@@ -315,7 +298,6 @@ const questions: QuestionProps[] = [
       "Muy interesado(a)",
     ],
   },
-  // 18) taskMeticulousness
   {
     name: "taskMeticulousness",
     label:
@@ -329,7 +311,6 @@ const questions: QuestionProps[] = [
       "Muy importante",
     ],
   },
-  // 19) equipmentMaintenanceInterest
   {
     name: "equipmentMaintenanceInterest",
     label:
@@ -343,7 +324,6 @@ const questions: QuestionProps[] = [
       "Muy interesado(a)",
     ],
   },
-  // 20) physicalEffortValue
   {
     name: "physicalEffortValue",
     label: "¿Cuánto valoras el esfuerzo físico en el trabajo?",
@@ -356,7 +336,6 @@ const questions: QuestionProps[] = [
       "Muy valorado",
     ],
   },
-  // 21) personalProtectionComfort
   {
     name: "personalProtectionComfort",
     label: "¿Qué tan cómodo(a) te sientes utilizando equipo de protección personal?",
@@ -369,14 +348,12 @@ const questions: QuestionProps[] = [
       "Muy cómodo(a)",
     ],
   },
-  // 22) emotionalExpression
   {
     name: "emotionalExpression",
     label: "¿Cómo evaluarías tu capacidad para expresar tus emociones?",
     type: "select",
     options: ["Muy baja", "Baja", "Neutral", "Alta", "Muy alta"],
   },
-  // 23) writingSkill
   {
     name: "writingSkill",
     label:
@@ -384,14 +361,12 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy bajas", "Bajas", "Neutras", "Altas", "Muy altas"],
   },
-  // 24) imaginationSkill
   {
     name: "imaginationSkill",
     label: "¿Cómo evaluarías tu capacidad para utilizar la imaginación?",
     type: "select",
     options: ["Muy baja", "Baja", "Neutral", "Alta", "Muy alta"],
   },
-  // 25) newIdeasInterest
   {
     name: "newIdeasInterest",
     label:
@@ -405,7 +380,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 26) artisticActivities
   {
     name: "artisticActivities",
     label:
@@ -419,7 +393,6 @@ const questions: QuestionProps[] = [
       "Lo disfruto mucho",
     ],
   },
-  // 27) musicalSkill
   {
     name: "musicalSkill",
     label:
@@ -433,7 +406,6 @@ const questions: QuestionProps[] = [
       "Muy desarrollada",
     ],
   },
-  // 28) artisticWorkComfort
   {
     name: "artisticWorkComfort",
     label:
@@ -447,7 +419,6 @@ const questions: QuestionProps[] = [
       "Muy cómodo(a)",
     ],
   },
-  // 29) artInspiration
   {
     name: "artInspiration",
     label: "¿Te sientes inspirado cuando estás rodeado de obras de arte y cultura?",
@@ -460,7 +431,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 30) creativeFreedomValue
   {
     name: "creativeFreedomValue",
     label:
@@ -474,7 +444,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 31) artisticToolsInterest
   {
     name: "artisticToolsInterest",
     label:
@@ -488,7 +457,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 32) innovativeProblemSolving
   {
     name: "innovativeProblemSolving",
     label:
@@ -502,7 +470,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 33) originality
   {
     name: "originality",
     label: "¿Consideras que la originalidad es una de tus principales características?",
@@ -515,7 +482,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 34) creativityMotivation
   {
     name: "creativityMotivation",
     label:
@@ -529,7 +495,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 35) empathy
   {
     name: "empathy",
     label:
@@ -537,7 +502,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy difícil", "Difícil", "Neutral", "Fácil", "Muy fácil"],
   },
-  // 36) careForOthers
   {
     name: "careForOthers",
     label:
@@ -551,7 +515,6 @@ const questions: QuestionProps[] = [
       "Muy importante",
     ],
   },
-  // 37) socialSkills
   {
     name: "socialSkills",
     label:
@@ -565,7 +528,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 38) patience
   {
     name: "patience",
     label:
@@ -579,7 +541,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 39) decisionMaking
   {
     name: "decisionMaking",
     label:
@@ -593,7 +554,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 40) socialServicesWillingness
   {
     name: "socialServicesWillingness",
     label:
@@ -607,7 +567,6 @@ const questions: QuestionProps[] = [
       "Muy dispuesto(a)",
     ],
   },
-  // 41) interpersonalSkills
   {
     name: "interpersonalSkills",
     label:
@@ -615,7 +574,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy carente", "Carente", "Neutral", "Dotado(a)", "Muy dotado(a)"],
   },
-  // 42) knowledgeSharing
   {
     name: "knowledgeSharing",
     label:
@@ -629,7 +587,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 43) emotionalExhaustion
   {
     name: "emotionalExhaustion",
     label:
@@ -643,7 +600,6 @@ const questions: QuestionProps[] = [
       "Muy en desacuerdo",
     ],
   },
-  // 44) humanitarianism
   {
     name: "humanitarianism",
     label: "¿Qué tan importante es para ti el humanitarismo?",
@@ -656,7 +612,6 @@ const questions: QuestionProps[] = [
       "Muy importante",
     ],
   },
-  // 45) emotionalSupportWork
   {
     name: "emotionalSupportWork",
     label:
@@ -670,7 +625,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 46) openCommunicationPreference
   {
     name: "openCommunicationPreference",
     label:
@@ -684,14 +638,12 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 47) experimentComfort
   {
     name: "experimentComfort",
     label: "¿Qué tan cómodo te sientes llevando a cabo experimentos?",
     type: "select",
     options: ["Muy incómodo", "Incómodo", "Neutral", "Cómodo", "Muy cómodo"],
   },
-  // 48) learningDrive
   {
     name: "learningDrive",
     label:
@@ -699,7 +651,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy bajo", "Bajo", "Neutral", "Alto", "Muy alto"],
   },
-  // 49) mathPhysicsSkill
   {
     name: "mathPhysicsSkill",
     label:
@@ -707,7 +658,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy baja", "Baja", "Neutral", "Alta", "Muy alta"],
   },
-  // 50) academicPerformance
   {
     name: "academicPerformance",
     label:
@@ -721,7 +671,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 51) researchCareerInterest
   {
     name: "researchCareerInterest",
     label:
@@ -735,7 +684,6 @@ const questions: QuestionProps[] = [
       "Muy interesado(a)",
     ],
   },
-  // 52) factFindingInterest
   {
     name: "factFindingInterest",
     label: "¿Qué tan interesado(a) estás en descubrir hechos y obtener información precisa?",
@@ -748,7 +696,6 @@ const questions: QuestionProps[] = [
       "Muy interesado(a)",
     ],
   },
-  // 53) continuousLearningSatisfaction
   {
     name: "continuousLearningSatisfaction",
     label:
@@ -762,7 +709,6 @@ const questions: QuestionProps[] = [
       "Muy satisfecho(a)",
     ],
   },
-  // 54) softwareToolsSatisfaction
   {
     name: "softwareToolsSatisfaction",
     label:
@@ -776,7 +722,6 @@ const questions: QuestionProps[] = [
       "Muy gratificante",
     ],
   },
-  // 55) practicalApplicationConfidence
   {
     name: "practicalApplicationConfidence",
     label:
@@ -790,7 +735,6 @@ const questions: QuestionProps[] = [
       "Muy seguro(a)",
     ],
   },
-  // 56) examPreparation
   {
     name: "examPreparation",
     label:
@@ -798,7 +742,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy mal", "Mal", "Neutral", "Bien", "Muy bien"],
   },
-  // 57) analyticalSkill
   {
     name: "analyticalSkill",
     label: "¿Qué tan analítico(a) te consideras al resolver problemas o tomar decisiones?",
@@ -811,7 +754,6 @@ const questions: QuestionProps[] = [
       "Muy analítico(a)",
     ],
   },
-  // 58) debateInterest
   {
     name: "debateInterest",
     label:
@@ -825,7 +767,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 59) attentionToDetail
   {
     name: "attentionToDetail",
     label:
@@ -833,7 +774,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy baja", "Baja", "Neutral", "Alta", "Muy alta"],
   },
-  // 60) followingInstructions
   {
     name: "followingInstructions",
     label:
@@ -841,14 +781,12 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy mal", "Mal", "Neutral", "Bien", "Muy bien"],
   },
-  // 61) goalPrecision
   {
     name: "goalPrecision",
     label: "¿Cómo evaluarías tu capacidad para ajustarte a metas precisas en tus proyectos?",
     type: "select",
     options: ["Muy baja", "Baja", "Neutral", "Alta", "Muy alta"],
   },
-  // 62) officeEquipmentSkill
   {
     name: "officeEquipmentSkill",
     label:
@@ -856,7 +794,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy baja", "Baja", "Neutral", "Alta", "Muy alta"],
   },
-  // 63) proceduresComfort
   {
     name: "proceduresComfort",
     label:
@@ -870,7 +807,6 @@ const questions: QuestionProps[] = [
       "Muy cómodo(a)",
     ],
   },
-  // 64) administrativeSkill
   {
     name: "administrativeSkill",
     label:
@@ -878,7 +814,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy inhábil", "Inhábil", "Neutral", "Hábil", "Muy hábil"],
   },
-  // 65) fileManagementSkill
   {
     name: "fileManagementSkill",
     label:
@@ -892,7 +827,6 @@ const questions: QuestionProps[] = [
       "Muy efectivo(a)",
     ],
   },
-  // 66) logisticsSkill
   {
     name: "logisticsSkill",
     label:
@@ -900,7 +834,6 @@ const questions: QuestionProps[] = [
     type: "select",
     options: ["Muy baja", "Baja", "Neutral", "Alta", "Muy alta"],
   },
-  // 67) routineTaskComfort
   {
     name: "routineTaskComfort",
     label:
@@ -914,7 +847,6 @@ const questions: QuestionProps[] = [
       "Muy cómodo(a)",
     ],
   },
-  // 68) organizationSkill
   {
     name: "organizationSkill",
     label:
@@ -928,7 +860,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 69) officeWorkInterest
   {
     name: "officeWorkInterest",
     label:
@@ -942,7 +873,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 70) structuredEnvironmentComfort
   {
     name: "structuredEnvironmentComfort",
     label:
@@ -956,7 +886,6 @@ const questions: QuestionProps[] = [
       "Muy cómodo(a)",
     ],
   },
-  // 71) careerStabilityValue
   {
     name: "careerStabilityValue",
     label: "¿Qué tanto valoras la estabilidad y seguridad en tu carrera profesional?",
@@ -969,7 +898,6 @@ const questions: QuestionProps[] = [
       "Muy valorado",
     ],
   },
-  // 72) entrepreneurInterest
   {
     name: "entrepreneurInterest",
     label:
@@ -983,20 +911,12 @@ const questions: QuestionProps[] = [
       "Muy interesado(a)",
     ],
   },
-  // 73) salesSkill
   {
     name: "salesSkill",
     label: "¿Qué tan eficaz te consideras en el arte de las ventas y la persuasión?",
     type: "select",
-    options: [
-      "Muy ineficaz",
-      "Ineficaz",
-      "Neutral",
-      "Eficaz",
-      "Muy eficaz",
-    ],
+    options: ["Muy ineficaz", "Ineficaz", "Neutral", "Eficaz", "Muy eficaz"],
   },
-  // 74) influenceAbility
   {
     name: "influenceAbility",
     label:
@@ -1010,7 +930,6 @@ const questions: QuestionProps[] = [
       "Muy amplio(a)",
     ],
   },
-  // 75) leadershipConfidence
   {
     name: "leadershipConfidence",
     label:
@@ -1024,7 +943,6 @@ const questions: QuestionProps[] = [
       "Muy seguro(a)",
     ],
   },
-  // 76) socialStatusEffort
   {
     name: "socialStatusEffort",
     label:
@@ -1038,21 +956,13 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 77) growthOpportunityIdentification
   {
     name: "growthOpportunityIdentification",
     label:
       "Imagina que eres dueño(a) de una pequeña empresa, ¿serías capaz de identificar oportunidades y amenazas para impulsar su crecimiento?",
     type: "select",
-    options: [
-      "Muy incapaz",
-      "Incapaz",
-      "Neutral",
-      "Capaz",
-      "Muy capaz",
-    ],
+    options: ["Muy incapaz", "Incapaz", "Neutral", "Capaz", "Muy capaz"],
   },
-  // 78) ideaTransformationMotivation
   {
     name: "ideaTransformationMotivation",
     label:
@@ -1066,7 +976,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 79) independentWorkPreference
   {
     name: "independentWorkPreference",
     label:
@@ -1080,7 +989,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 80) negotiationSkill
   {
     name: "negotiationSkill",
     label: "¿Te consideras una persona con habilidades para negociar y cerrar acuerdos?",
@@ -1093,7 +1001,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 81) businessTrendsInterest
   {
     name: "businessTrendsInterest",
     label:
@@ -1107,7 +1014,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 82) materialSuccessValue
   {
     name: "materialSuccessValue",
     label:
@@ -1121,7 +1027,6 @@ const questions: QuestionProps[] = [
       "Muy importante",
     ],
   },
-  // 83) authorityPreference
   {
     name: "authorityPreference",
     label:
@@ -1135,7 +1040,6 @@ const questions: QuestionProps[] = [
       "Muy de acuerdo",
     ],
   },
-  // 84) ambitionPursuit
   {
     name: "ambitionPursuit",
     label:
@@ -1149,15 +1053,9 @@ const questions: QuestionProps[] = [
       "Muy dispuesto(a)",
     ],
   },
-  // 85) decisionMaking (ya está arriba con la misma 'name'? ¡Cuidado!)
-  // El user form lo tenía 1 sola vez, la dejamos comentada:
-  // { name: "decisionMaking", label: "...", type: "select", ...}
-  // => No la duplicamos. Fue la #39
-
-  // 86) responses (opcional, el user lo mencionaba en el estado, 
-  //   pero no parece tener una pregunta textual. 
-  //   Si no hay una pregunta concreta, podemos omitirlo.
-  //   Lo dejamos en el estado para compatibilidad.)
+  // 85) decisionMaking
+  // (Si ya se incluyó en #39, no lo duplicamos)
+  // 86) responses (opcional) ...
 ];
 
 // Barra de progreso
@@ -1170,9 +1068,8 @@ const ProgressBar = ({ progress }: { progress: number }) => (
 export default function UserForm() {
   const router = useRouter();
 
-  // Estado inicial
+  // Estado inicial con TODOS los campos en blanco o arrays vacíos
   const [formData, setFormData] = useState<FormDataType>({
-    // Campos
     name: "",
     email: "",
     responses: "",
@@ -1275,7 +1172,7 @@ export default function UserForm() {
     });
   }, [currentIndex]);
 
-  // Carga desde localStorage (si existe)
+  // Carga desde localStorage
   useEffect(() => {
     const storedData = localStorage.getItem("formData");
     if (storedData) {
@@ -1283,7 +1180,7 @@ export default function UserForm() {
     }
   }, []);
 
-  // Guarda en localStorage cada vez que cambia
+  // Guarda en localStorage
   useEffect(() => {
     localStorage.setItem("formData", JSON.stringify(formData));
   }, [formData]);
@@ -1293,25 +1190,22 @@ export default function UserForm() {
   const currentQuestion = questions[currentIndex];
   const remaining = totalQuestions - (currentIndex + 1);
 
-  // Manejo de cambios para todos los inputs
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     const questionDef = questions.find((q) => q.name === name);
 
-    // Si es checkbox
+    // Checkbox
     if (questionDef?.type === "checkbox" && e.target instanceof HTMLInputElement) {
       const checked = e.target.checked;
       const prevArray = formData[name] as string[];
       let updatedArray = [...prevArray];
-
       if (checked) {
         updatedArray.push(value);
       } else {
         updatedArray = updatedArray.filter((item) => item !== value);
       }
-
       setFormData({ ...formData, [name]: updatedArray });
     } else {
       // Radio, select, text, email, number
@@ -1319,15 +1213,10 @@ export default function UserForm() {
     }
   };
 
-  // Botón "Siguiente"
   const handleNext = () => {
-    // Validación (si es required y está vacío)
     if (currentQuestion.required) {
       const answer = formData[currentQuestion.name];
-      if (
-        (Array.isArray(answer) && answer.length === 0) ||
-        (!Array.isArray(answer) && !answer)
-      ) {
+      if ((Array.isArray(answer) && answer.length === 0) || (!Array.isArray(answer) && !answer)) {
         setError("Este campo es obligatorio.");
         return;
       }
@@ -1336,7 +1225,6 @@ export default function UserForm() {
     setCurrentIndex((prev) => prev + 1);
   };
 
-  // Botón "Atrás"
   const handleBack = () => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
@@ -1344,17 +1232,12 @@ export default function UserForm() {
     }
   };
 
-  // Al llegar al final -> Enviar
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
+  // Enviar al final (sin <form>)
+  const handleSubmit = async () => {
     // Validar la última pregunta
     if (currentQuestion.required) {
       const answer = formData[currentQuestion.name];
-      if (
-        (Array.isArray(answer) && answer.length === 0) ||
-        (!Array.isArray(answer) && !answer)
-      ) {
+      if ((Array.isArray(answer) && answer.length === 0) || (!Array.isArray(answer) && !answer)) {
         setError("Este campo es obligatorio.");
         return;
       }
@@ -1363,39 +1246,39 @@ export default function UserForm() {
 
     // Construir fullName
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+    const dataToSend = { ...formData, name: fullName };
 
-    // Ejemplo de data final
-    const dataToSend = {
-      ...formData,
-      name: fullName, // guardamos el nombre completo en "name"
-    };
-
-    console.log("Datos enviados:", dataToSend);
+    console.log("Datos enviados al backend:", dataToSend);
 
     try {
-      const response = await fetch("/api/saveresponse", {
+      const response = await fetch("/api/form-responses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(dataToSend),
       });
-      if (response.ok) {
-        alert("¡Formulario enviado exitosamente!");
-        // Puedes limpiar localStorage si no quieres que se quede
-        // localStorage.removeItem("formData");
-        router.push("/examples/all");
-      } else {
+      if (!response.ok) {
         alert("Error al enviar el formulario.");
+        return;
       }
+
+      const { sessionId } = await response.json();
+      if (!sessionId) {
+        alert("No se recibió sessionId desde el servidor.");
+        return;
+      }
+
+      alert("¡Formulario enviado exitosamente!");
+      // localStorage.removeItem("formData"); // Opcional
+
+      router.push(`/examples/all?sessionId=${sessionId}`);
     } catch (error) {
       console.error("Error submitting form:", error);
+      alert("Ocurrió un error al enviar el formulario.");
     }
   };
 
   return (
-    <form
-      className="form-container animate__animated animate__fadeIn"
-      onSubmit={handleSubmit}
-    >
+    <div className="form-container animate__animated animate__fadeIn">
       {/* Barra de progreso */}
       <ProgressBar progress={progress} />
 
@@ -1403,16 +1286,12 @@ export default function UserForm() {
       <p className="counter">
         Pregunta {currentIndex + 1} de {totalQuestions}
       </p>
-      {/* Preguntas restantes */}
-      <p className="remaining">
-        Preguntas restantes: {remaining}
-      </p>
+      <p className="remaining">Preguntas restantes: {remaining}</p>
 
       {/* Contenedor de la pregunta actual */}
       <div className="question-container">
         <label className="questionLabel">{currentQuestion.label}</label>
 
-        {/* Render dinámico según el tipo */}
         {["text", "email", "number"].includes(currentQuestion.type) && (
           <input
             type={currentQuestion.type}
@@ -1491,7 +1370,7 @@ export default function UserForm() {
             Siguiente
           </button>
         ) : (
-          <button type="submit" className="submitButton">
+          <button type="button" onClick={handleSubmit} className="submitButton">
             Enviar
           </button>
         )}
@@ -1589,6 +1468,6 @@ export default function UserForm() {
           background-color: #434190;
         }
       `}</style>
-    </form>
+    </div>
   );
 }
